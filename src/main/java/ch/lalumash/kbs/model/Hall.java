@@ -8,5 +8,6 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class Hall {
+    private String id;
     private List<Row> rows;
 }
