@@ -2,8 +2,11 @@ package ch.lalumash.kbs.controller;
 
 import ch.lalumash.kbs.datastorage.DataProvider;
 import ch.lalumash.kbs.dto.ComplexScreeningDto;
+import ch.lalumash.kbs.dto.ReservationDto;
 import ch.lalumash.kbs.dto.ScreeningDto;
+import ch.lalumash.kbs.manager.ScreeningManager;
 import ch.lalumash.kbs.model.Screening;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,14 @@ import java.util.stream.Collectors;
 @RequestMapping("api/screening/")
 @CrossOrigin("*")
 public class ScreeningController {
+
+    private ScreeningManager screeningManager;
+
+    @Autowired
+    public ScreeningController(ScreeningManager screeningManager) {
+        this.screeningManager = screeningManager;
+    }
+
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     private List<ScreeningDto> getScreeningsForDate(LocalDate date) {
@@ -54,5 +65,10 @@ public class ScreeningController {
         }
 
         return ComplexScreeningDto.fromScreening(screening);
+    }
+
+    @PostMapping("reserve/")
+    public String reserve(@RequestBody ReservationDto reservationDto) {
+        return this.screeningManager.reservePlace(reservationDto);
     }
 }

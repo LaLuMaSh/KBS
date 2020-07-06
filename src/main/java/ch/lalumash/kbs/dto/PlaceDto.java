@@ -15,8 +15,9 @@ public class PlaceDto {
     public static PlaceDto fromPlace(Place place, Screening screening) {
         boolean isReserved = false;
         for (Reservation reservation : place.getReservations()) {
-            if (screening.getUuid().equals(reservation.getScreening().getUuid())) {
+            if (screening.getUuid().equals(reservation.getScreening())) {
                 isReserved = true;
+                break;
             }
         }
         return new PlaceDto(place.getNumber(), isReserved);

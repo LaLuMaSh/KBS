@@ -3,12 +3,11 @@ package ch.lalumash.kbs.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Data
 public class Reservation {
-    private Screening screening;
-    private Customer customer;
-    private List<Place> places;
+    private UUID screening;
+    private UUID customer;
 }

@@ -58,5 +58,13 @@ public class DataProvider {
         screenings.add(createScreening("Ein Film 2", "04-07-2020-17:30","C-2"));
         screenings.add(createScreening("Ein Film", "05-07-2020-18:30","C-1"));
         screenings.add(createScreening("Ein Film 2", "05-07-2020-19:30","C-2"));
+        screenings.add(createScreening("Ein Film", "06-07-2020-18:30","C-1"));
+        screenings.add(createScreening("Ein Film 2", "06-07-2020-19:30","C-2"));
+        screenings.add(createScreening("Ein Film", "07-07-2020-18:30","C-1"));
+        screenings.add(createScreening("Ein Film 2", "07-07-2020-19:30","C-2"));
+        screenings.add(createScreening("Ein Film", "08-07-2020-18:30","C-1"));
+        screenings.add(createScreening("Ein Film 2", "08-07-2020-19:30","C-2"));
+        screenings.add(createScreening("Ein Film", "09-07-2020-18:30","C-1"));
+        screenings.add(createScreening("Ein Film 2", "09-07-2020-19:30","C-2"));
     }
 }

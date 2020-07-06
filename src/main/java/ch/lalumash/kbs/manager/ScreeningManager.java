@@ -1,30 +1,80 @@
 package ch.lalumash.kbs.manager;
 
-import ch.lalumash.kbs.model.Customer;
-import ch.lalumash.kbs.model.Movie;
-import ch.lalumash.kbs.model.Place;
-import ch.lalumash.kbs.model.Screening;
+import ch.lalumash.kbs.datastorage.DataProvider;
+import ch.lalumash.kbs.dto.LocationDto;
+import ch.lalumash.kbs.dto.ReservationDto;
+import ch.lalumash.kbs.model.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ScreeningManager {
     private List<Screening> screenings;
 
-    private List<Screening> getScreening(String movie, LocalDate time) {
+    public List<Screening> getScreening(String movie, LocalDate time) {
         throw new RuntimeException("not implemented");
     }
 
-    private void displayInformation(Screening screening) {
+    public void displayInformation(Screening screening) {
         throw new RuntimeException("not implemented");
     }
 
-    private void reservePlace(Screening screening, Place... place) {
-        throw new RuntimeException("not implemented");
+    public String reservePlace(ReservationDto reservationDto) {
+        Customer customer = DataProvider.customers.stream().filter(c -> c.getUuid().equals(reservationDto.customerUuid)).findFirst().orElse(null);
+
+        if (customer == null) {
+            return "Der Benutzer existiert nicht.";
+        }
+
+        Screening screening = DataProvider.screenings.stream().filter(screening1 -> screening1.getUuid().equals(reservationDto.screeningUuid)).findFirst().orElse(null);
+
+        if (screening == null) {
+            return "Die Vorstellung existiert nicht.";
+        }
+
+        for (LocationDto locationDto : reservationDto.places) {
+
+            Row row = null;
+            Hall hall = screening.getHall();
+
+            if (hall == null) {
+               return "Halle wurde nicht gefunden.";
+            }
+
+            if (locationDto == null) {
+                return "Fehlerhafter zustand";
+            }
+
+
+            List<Row> rows = hall.getRows();
+            for (Row r : rows) {
+
+                if (r.getId() == locationDto.getRow()) {
+                    row = r;
+                    break;
+                }
+            }
+
+            if (row == null) {
+                return "Die Reihe " + locationDto.getRow() + " existiert nicht.";
+            }
+
+            Place place = row.getPlaces().stream().filter(place1 -> place1.getNumber() == locationDto.getPlace()).findFirst().orElse(null);
+
+            if (place == null) {
+                return "Der Platz " + locationDto.getPlace() + " existiert nicht.";
+            }
+
+            Reservation reservation = new Reservation(screening.getUuid(), customer.getUuid());
+            place.getReservations().add(reservation);
+        }
+
+        return "";
     }
 
-    private List<Customer> getCustomers(Screening screening) {
+    public List<Customer> getCustomers(Screening screening) {
         throw new RuntimeException("not implemented");
     }
     /**
