@@ -1,30 +1,29 @@
 package ch.lalumash.kbs.datastorage;
 
 import ch.lalumash.kbs.model.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static ch.lalumash.kbs.datastorage.DataHelpers.createHall;
-import static ch.lalumash.kbs.datastorage.DataHelpers.createScreening;
+import static ch.lalumash.kbs.datastorage.MockDataHelpers.createHall;
 
-public class DataProvider {
-    public static List<Movie> movies = new ArrayList<>();
-    public static List<Screening> screenings = new ArrayList<>();
-    public static List<Hall> halls = new ArrayList<>();
-    public static List<Customer> customers = new ArrayList<>();
+@Getter
+public class MockMemoryDataProvider implements IDataProvider {
+    private final List<Movie> movies = new ArrayList<>();
+    private final List<Screening> screenings = new ArrayList<>();
+    private final List<Hall> halls = new ArrayList<>();
+    private final List<Customer> customers = new ArrayList<>();
 
 
-    static {
-        halls();
-        customers();
-        movies();
-        screenings();
+    public MockMemoryDataProvider() {
+        setup();
     }
 
-    private static void customers() {
+    public void setupCustomers() {
         customers.add(new Customer(UUID.randomUUID(),"Hans", "Peter", "31546546546"));
         customers.add(new Customer(UUID.randomUUID(),"Shawn", "Keller", "asfsad"));
         customers.add(new Customer(UUID.randomUUID(),"Max", "Nell", "asdfasdfasdf"));
@@ -32,22 +31,22 @@ public class DataProvider {
         customers.add(new Customer(UUID.randomUUID(),"Laurin", "Kuezler", "sdfsafdasdf"));
     }
 
-    private static void movies() {
+    public void setupMovies() {
         LocalDateTime from = LocalDateTime.of(2020, 10, 1, 0, 0, 0);
         LocalDateTime to = LocalDateTime.of(2020, 10, 20, 0, 0, 0);
         movies.add(new Movie("Ein Film", 20.0, from, to));
         movies.add(new Movie("Ein Film 2", 30.0,from, to.plusDays(10)));
     }
 
-    private static void halls() {
-        halls.add(createHall("C-1"));
-        halls.add(createHall("C-2"));
-        halls.add(createHall("C-3"));
-        halls.add(createHall("C-4"));
-        halls.add(createHall("C-5"));
+    public void setupHalls() {
+        halls.add(createHall("C-1", 10, 20));
+        halls.add(createHall("C-2", 10, 15));
+        halls.add(createHall("C-3", 8, 20));
+        halls.add(createHall("C-4", 5, 30));
+        halls.add(createHall("C-5", 20, 10));
     }
 
-    private static void screenings() {
+    public void setupScreenings() {
         screenings.add(createScreening("Ein Film", "01-07-2020-10:30","C-1"));
         screenings.add(createScreening("Ein Film 2", "01-07-2020-11:30","C-2"));
         screenings.add(createScreening("Ein Film", "02-07-2020-12:30","C-1"));
@@ -66,5 +65,11 @@ public class DataProvider {
         screenings.add(createScreening("Ein Film 2", "08-07-2020-19:30","C-2"));
         screenings.add(createScreening("Ein Film", "09-07-2020-18:30","C-1"));
         screenings.add(createScreening("Ein Film 2", "09-07-2020-19:30","C-2"));
+    }
+    private Screening createScreening(String movieTitle, String time, String hallName) {
+        LocalDateTime parse = LocalDateTime.parse(time, DateTimeFormatter.ofPattern("dd-MM-yyyy-HH:mm"));
+        Movie movie1 = movies.stream().filter(movie -> movie.getTitle().equalsIgnoreCase(movieTitle)).findFirst().get();
+        Hall hall = halls.stream().filter(hall1 -> hall1.getId().equalsIgnoreCase(hallName)).findFirst().get();
+        return new Screening(UUID.randomUUID(), movie1, hall,parse);
     }
 }

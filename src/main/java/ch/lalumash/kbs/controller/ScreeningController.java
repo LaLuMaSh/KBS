@@ -1,6 +1,6 @@
 package ch.lalumash.kbs.controller;
 
-import ch.lalumash.kbs.datastorage.DataProvider;
+import ch.lalumash.kbs.datastorage.IDataProvider;
 import ch.lalumash.kbs.dto.ComplexScreeningDto;
 import ch.lalumash.kbs.dto.ReservationDto;
 import ch.lalumash.kbs.dto.ScreeningDto;
@@ -21,50 +21,28 @@ import java.util.stream.Collectors;
 @CrossOrigin("*")
 public class ScreeningController {
 
-    private ScreeningManager screeningManager;
+
+    private final ScreeningManager screeningManager;
 
     @Autowired
     public ScreeningController(ScreeningManager screeningManager) {
         this.screeningManager = screeningManager;
     }
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    private List<ScreeningDto> getScreeningsForDate(LocalDate date) {
-        String time = date.format(formatter);
 
-        return DataProvider.screenings.stream()
-                .filter(screening ->
-                        time.equalsIgnoreCase(screening.getTime().format(formatter)))
-                .map(ScreeningDto::fromScreening)
-                .collect(Collectors.toList());
-    }
     @GetMapping("get")
     public List<ScreeningDto> getScreening(@DateTimeFormat(pattern = "dd-MM-yyyy") @RequestParam LocalDate date, @RequestParam(required = false) String movie) {
-        if (movie == null || movie.isEmpty()) {
-            return getScreeningsForDate(date);
-        }
-        String time = date.format(formatter);
-        return DataProvider.screenings.stream()
-                .filter(screening ->
-                        screening.getMovie().getTitle().equalsIgnoreCase(movie)
-                        && time.equalsIgnoreCase(screening.getTime().format(formatter))
-                )
-                .map(ScreeningDto::fromScreening)
-                .collect(Collectors.toList());
+        return screeningManager.getScreening(movie, date);
     }
 
     @GetMapping("get/complex/{uuid}")
     public ComplexScreeningDto getComplexScreening(@PathVariable UUID uuid) {
-        Screening screening = DataProvider.screenings.stream()
-                .filter(scr -> scr.getUuid().equals(uuid))
-                .findFirst().orElse(null);
-
-        if (screening == null) {
-            return null;
-        }
-
-        return ComplexScreeningDto.fromScreening(screening);
+        return this.screeningManager.getDetails(uuid);
+    }
+    @GetMapping("get/customer/{uuid}")
+    public List<ScreeningDto> get(@PathVariable UUID uuid) {
+        return this.screeningManager.getScreenings(uuid);
     }
 
     @PostMapping("reserve/")
