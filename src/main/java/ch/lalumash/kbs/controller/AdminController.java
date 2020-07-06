@@ -1,5 +1,6 @@
 package ch.lalumash.kbs.controller;
 
+import ch.lalumash.kbs.dto.CreateScreeningDto;
 import ch.lalumash.kbs.dto.MovieDto;
 import ch.lalumash.kbs.manager.KinoManager;
 import ch.lalumash.kbs.model.Movie;
@@ -21,5 +22,9 @@ public class AdminController {
     public MovieDto addMovie(@RequestBody Movie movie) {
         this.kinoManager.addFilm(movie);
         return MovieDto.fromMovie(movie);
+    }
+    @PostMapping("createScreenings")
+    public String createScreenings(@RequestBody CreateScreeningDto createScreeningDto) {
+        return this.kinoManager.createScreenings(createScreeningDto.getTitle(), createScreeningDto.getAmount(), createScreeningDto.getStart(), createScreeningDto.getTimes());
     }
 }

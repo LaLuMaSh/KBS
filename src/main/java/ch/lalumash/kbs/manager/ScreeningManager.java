@@ -8,6 +8,7 @@ import ch.lalumash.kbs.dto.ScreeningDto;
 import ch.lalumash.kbs.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -131,16 +132,6 @@ public class ScreeningManager {
     }
 
     public List<Customer> getCustomers(Screening screening) {
-        throw new RuntimeException("not implemented");
-    }
-
-    /**
-     * @param movie the movie that should be used as a screening
-     * @param weeks the amount of weeks the screening should run
-     * @param start the first date
-     * @param time  of the screening in the format hh:mm
-     */
-    public void createScreenings(Movie movie, int weeks, LocalDateTime start, String... time) {
         throw new RuntimeException("not implemented");
     }
 
