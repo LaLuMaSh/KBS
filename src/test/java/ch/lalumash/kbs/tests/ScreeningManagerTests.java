@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class ScreeningManagerTests {
     @Test
-    public void test() {
+    public void reservieren_von_plaetzen_mit_gueltigen_parametern_sollte_plaetze_reservieren() {
         IDataProvider dataProvider = new EmptyMemoryDataProvider();
 
 
