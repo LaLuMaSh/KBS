@@ -2,6 +2,7 @@ package ch.lalumash.kbs.controller;
 
 import ch.lalumash.kbs.dto.CreateScreeningDto;
 import ch.lalumash.kbs.dto.MovieDto;
+import ch.lalumash.kbs.dto.MsgResponseDto;
 import ch.lalumash.kbs.manager.KinoManager;
 import ch.lalumash.kbs.model.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class AdminController {
         return MovieDto.fromMovie(movie);
     }
     @PostMapping("createScreenings")
-    public String createScreenings(@RequestBody CreateScreeningDto createScreeningDto) {
-        return this.kinoManager.createScreenings(createScreeningDto.getTitle(), createScreeningDto.getAmount(), createScreeningDto.getStart(), createScreeningDto.getTimes());
+    public MsgResponseDto createScreenings(@RequestBody CreateScreeningDto createScreeningDto) {
+        return new MsgResponseDto(this.kinoManager.createScreenings(createScreeningDto.getTitle(), createScreeningDto.getAmount(), createScreeningDto.getStart(), createScreeningDto.getTimes()));
     }
 }
